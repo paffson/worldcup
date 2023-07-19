@@ -8,34 +8,34 @@ echo -e "\nTotal number of goals in all games from winning teams:"
 echo "$($PSQL "SELECT SUM(winner_goals) FROM games")"
 
 echo -e "\nTotal number of goals in all games from both teams combined:"
-echo
+echo "$($PSQL "SELECT SUM(winner_goals) + SUM(opponent_goals) FROM games")"
 
 echo -e "\nAverage number of goals in all games from the winning teams:"
-echo
+echo "$($PSQL "SELECT AVG(winner_goals) FROM games")"
 
 echo -e "\nAverage number of goals in all games from the winning teams rounded to two decimal places:"
-echo
+echo "$($PSQL "SELECT round(AVG(winner_goals), 2) FROM games")"
 
 echo -e "\nAverage number of goals in all games from both teams:"
-echo
+echo "$($PSQL "SELECT AVG(winner_goals + opponent_goals) FROM games")"
 
 echo -e "\nMost goals scored in a single game by one team:"
-echo
+echo "$($PSQL "SELECT max(winner_goals) FROM games")"
 
 echo -e "\nNumber of games where the winning team scored more than two goals:"
-echo
+echo "$($PSQL "SELECT count(*) FROM games where winner_goals > 2")"
 
 echo -e "\nWinner of the 2018 tournament team name:"
-echo
+echo "$($PSQL "SELECT name FROM games inner join teams on winner_id = team_id where year = 2018 and round = 'Final'")"
 
 echo -e "\nList of teams who played in the 2014 'Eighth-Final' round:"
-echo
+echo "$($PSQL "SELECT name FROM games inner join teams on (winner_id = team_id or opponent_id = team_id) where year = 2014 and round = 'Eighth-Final' order by name")"
 
 echo -e "\nList of unique winning team names in the whole data set:"
-echo
+echo "$($PSQL "SELECT distinct(name) FROM teams inner join games on (winner_id = team_id)  order by name")"
 
 echo -e "\nYear and team name of all the champions:"
-echo
+echo "$($PSQL "SELECT year, name FROM games inner join teams on winner_id = team_id where round = 'Final' order by year")"
 
 echo -e "\nList of teams that start with 'Co':"
-echo
+echo "$($PSQL "SELECT name from teams where name like 'Co%'")"
